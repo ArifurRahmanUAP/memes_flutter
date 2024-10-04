@@ -9,8 +9,8 @@ import '../../data/model/memes_response_model.dart';
 class HomeScreenController extends GetxController {
   final isLoginLoading = false.obs;
   final memesResponseModel = MemesResponseModel().obs;
-  List<Memes> filteredMemes = [];
-  var controller = TextEditingController().obs;
+  final  filteredMemes = <Memes>[].obs;
+  final controller = TextEditingController().obs;
 
   Future<void> getMemesApiCall() async {
     try {

@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         child: GetBuilder<HomeScreenController>(initState: (state) {
           homeScreenController.getMemesApiCall().then(
                 (value) {
-              homeScreenController.filteredMemes =
+              homeScreenController.filteredMemes.value =
               homeScreenController.memesResponseModel.value.data!.memes!;
             },
           );
@@ -36,12 +36,12 @@ class HomeScreen extends StatelessWidget {
                 TextField(
                   controller: homeScreenController.controller.value,
                   onChanged: (value) {
-                    final filtered =
+                    final filtereds =
                     homeScreenController.filteredMemes.where((filterText) {
                       return filterText.name!.contains(value) ||
                           filterText.name!.contains(value);
                     }).toList();
-                    homeScreenController.filteredMemes = filtered;
+                    homeScreenController.filteredMemes.value = filtereds;
                     homeScreenController.update(["searchUpdate"]);
                   },
                   decoration: InputDecoration(
@@ -78,15 +78,14 @@ class HomeScreen extends StatelessWidget {
                       : GetBuilder<HomeScreenController>(
                       id: "searchUpdate",
                       builder: (logic) {
-                        return homeScreenController.filteredMemes.length == 0
-                            ? Container(
-                          child: const Center(
-                            child: Text("Nothing Found"),
-                          ),
-                        )
+                        return homeScreenController.filteredMemes.isEmpty
+                            ? const Center(
+                              child: Text("Nothing Found"),
+                            )
                             : Container(
                           color: const Color(0xff2b2b34),
                           child: ListView.builder(
+                            itemCount: homeScreenController.filteredMemes.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
